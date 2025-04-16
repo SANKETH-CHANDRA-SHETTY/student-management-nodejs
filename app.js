@@ -1,40 +1,42 @@
-const express = require('express');
-const exphbs = require('express-handlebars');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const express = require("express");
+const exphbs = require("express-handlebars");
+const bodyParser = require("body-parser");
+const mysql = require("mysql");
 
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 // Parsing middleware
 // Parse application/x-www-form-urlencoded
 // app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.urlencoded({extended: true})); // New
+app.use(express.urlencoded({ extended: true })); // New
 
 // Parse application/json
 // app.use(bodyParser.json());
 app.use(express.json()); // New
 
 // Static Files
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 // Templating Engine
-app.engine('hbs', exphbs( {extname: '.hbs' }));
-app.set('view engine', 'hbs');
+app.engine("hbs", exphbs({ extname: ".hbs" }));
+app.set("view engine", "hbs");
 
 // Connection Pool
 // You don't need the connection here as we have it in userController
-let connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME
+
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "sanketh", // update if you have a MySQL password
+  database: "student_management", // or whatever DB name you used in phpMyAdmin
 });
- 
 
-const routes = require('./server/routes/user');
-app.use('/', routes);
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
+const routes = require("./server/routes/user");
+app.use("/", routes);
